@@ -5,11 +5,11 @@ namespace Publisher {
     public class RestartController : MonoBehaviour {
 
         void Start() {
-            EventBroker.InvokeOnRestartGame();
+            EventBroker.OnRestartGame.Invoke();
         }
 
         public void RestartGame() {
-            EventBroker.InvokeOnRestartGame();
+            EventBroker.OnRestartGame.Invoke();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

@@ -19,7 +19,7 @@ namespace Publisher {
                     value = 0;
                 _gold = value;
 
-                EventBroker.InvokeOnGoldAmountChanged(Gold);
+                EventBroker.OnGoldAmountChanged.Invoke(Gold);
             }
         }
 
@@ -29,7 +29,7 @@ namespace Publisher {
 
         void ResetGold() {
             Gold = 0;
-            EventBroker.InvokeOnGoldAmountChanged(Gold);
+            EventBroker.OnGoldAmountChanged.Invoke(Gold);
         }
     }
 }
