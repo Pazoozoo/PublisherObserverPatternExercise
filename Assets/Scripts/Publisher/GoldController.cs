@@ -5,11 +5,11 @@ namespace Publisher {
         int _gold;
 
         void Awake() {
-            EventBroker.OnRestartGame += ResetGold;
+            EventBroker.Instance().SubscribeTo<RestartGameMessage>(ResetGold);
         }
 
         void OnDisable() {
-            EventBroker.OnRestartGame -= ResetGold;
+            EventBroker.Instance().UnSubscribeFrom<RestartGameMessage>(ResetGold);
         }
 
         int Gold {
@@ -18,8 +18,8 @@ namespace Publisher {
                 if (value < 0)
                     value = 0;
                 _gold = value;
-
-                EventBroker.OnGoldAmountChanged.Invoke(Gold);
+                
+                EventBroker.Instance().Send(new GoldAmountChangedMessage(Gold));
             }
         }
 
@@ -27,9 +27,9 @@ namespace Publisher {
             Gold += value;
         }
 
-        void ResetGold() {
+        void ResetGold(RestartGameMessage message) {
             Gold = 0;
-            EventBroker.OnGoldAmountChanged.Invoke(Gold);
+            EventBroker.Instance().Send(new GoldAmountChangedMessage(Gold));
         }
     }
 }

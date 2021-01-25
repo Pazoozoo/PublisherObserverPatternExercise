@@ -1,3 +1,4 @@
+using Publisher;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,15 +8,15 @@ namespace Observer {
     
         void Awake() {
             _goldAmountText = GetComponent<Text>();
-            EventBroker.OnGoldAmountChanged += UpdateOnGoldText;
+            EventBroker.Instance().SubscribeTo<GoldAmountChangedMessage>(UpdateGoldText);
         }
 
         void OnDisable() {
-            EventBroker.OnGoldAmountChanged -= UpdateOnGoldText;
+            EventBroker.Instance().UnSubscribeFrom<GoldAmountChangedMessage>(UpdateGoldText);
         }
 
-        void UpdateOnGoldText(int goldAmount) {
-            _goldAmountText.text = goldAmount.ToString();
+        void UpdateGoldText(GoldAmountChangedMessage message) {
+            _goldAmountText.text = message.GoldAmount.ToString();
         }
     }
 }

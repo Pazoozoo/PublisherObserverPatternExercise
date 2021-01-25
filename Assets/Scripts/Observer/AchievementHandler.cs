@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Publisher;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,18 +11,18 @@ namespace Observer {
         public GameObject textPrefab;
 
         void Awake() {
-            EventBroker.OnGoldAmountChanged += UpdateOnGoldAmount;
+            EventBroker.Instance().SubscribeTo<GoldAmountChangedMessage>(UpdateGoldAmount);
         }
 
         void OnDisable() {
             foreach (var a in achievements) {
                 a.Completed = false;
             }
-            EventBroker.OnGoldAmountChanged -= UpdateOnGoldAmount;
+            EventBroker.Instance().UnSubscribeFrom<GoldAmountChangedMessage>(UpdateGoldAmount);
         }
 
-        void UpdateOnGoldAmount(int gold) {
-            foreach (var a in achievements.Where(a => gold >= a.goal && !a.Completed)) {
+        void UpdateGoldAmount(GoldAmountChangedMessage message) {
+            foreach (var a in achievements.Where(a => message.GoldAmount >= a.goal && !a.Completed)) {
                 ActivateAchievement(a.goal, a.displayDuration);
                 a.Completed = true;
             }
